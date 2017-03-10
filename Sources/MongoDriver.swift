@@ -3,7 +3,7 @@ import Fluent
 import MongoKitten
 
 public class MongoDriver: Fluent.Driver {
-    
+
     /**
         Describes the types of errors
         this driver can throw.
@@ -13,9 +13,9 @@ public class MongoDriver: Fluent.Driver {
         case noQuery
         case unsupported(String)
     }
-    
+
     let database: MongoKitten.Database
-    
+
     /**
         Creates a new `MongoDriver` with
         the given database name, credentials, and port.
@@ -28,7 +28,7 @@ public class MongoDriver: Fluent.Driver {
         MongoDB uses `_id` as the main identifier.
     */
     public var idKey: String = "_id"
-    
+
     /**
         Executes a query on the current MongoDB database.
     */
@@ -52,7 +52,7 @@ public class MongoDriver: Fluent.Driver {
             return query.data ?? Node.null
         }
     }
-    
+
     public func schema(_ schema: Schema) throws {
         switch schema {
         case .delete(let entity):
@@ -62,13 +62,13 @@ public class MongoDriver: Fluent.Driver {
             // No schemas in Mongo to modify or create
         }
     }
-    
+
     public func raw(_ raw: String, _ values: [Node]) throws -> Node {
         throw Error.unsupported("Mongo does not support raw queries.")
     }
 
     // MARK: Private
-    
+
     private func convert(document: Document) -> Node {
         return document.node
     }
@@ -91,14 +91,14 @@ public class MongoDriver: Fluent.Driver {
             throw Error.noData
         }
         var document: Document = [:]
-        
+
         for (key, val) in data {
             if key == idKey && val == .null {
                 continue
             }
             document[raw: key] = val
         }
-        
+
         return try database[query.entity].insert(document)
     }
 
@@ -114,7 +114,7 @@ public class MongoDriver: Fluent.Driver {
         guard let data = query.data?.nodeObject else {
             throw Error.noData
         }
-        
+
         var document: Document = [:]
 
         for (key, val) in data {
@@ -127,4 +127,3 @@ public class MongoDriver: Fluent.Driver {
         try database[query.entity].update(matching: query.makeMKQuery(), to: document)
     }
 }
-
