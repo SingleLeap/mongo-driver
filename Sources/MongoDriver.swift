@@ -50,6 +50,8 @@ public class MongoDriver: Fluent.Driver {
         case .modify:
             try modify(query)
             return query.data ?? Node.null
+        default:
+            throw Error.unsupported("Query action \(query.action) isn't supported.")
         }
     }
 
