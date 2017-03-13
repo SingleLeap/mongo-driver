@@ -50,18 +50,22 @@ extension Fluent.Filter {
 
                 query = MKQuery(aqt: .and(ands))
             }
-        case .group(let relation, let filters):
-            fatalError()
-//            let aqts = try filters.reduce(Query([:]), &&)
-//
-//            switch relation {
-//            case .and:
-//                query = MKQuery(aqt: .and(aqts))
-//            case .or:
-//                query = MKQuery(aqt: .or(aqts))
-//            }
+            case .group(let relation, let filters):
+                print(relation)
+                print(filters)
+                fatalError()
+            /*
+            let aqts = try filters.reduce(Query([:]), &&)
+
+            switch relation {
+            case .and:
+                query = MKQuery(aqt: .and(aqts))
+            case .or:
+                query = MKQuery(aqt: .or(aqts))
+            }
+            */
         }
-        
+
         return query
     }
 }
